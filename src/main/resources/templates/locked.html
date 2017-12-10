@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>VR Store</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #b0d4ee;
+            color: #123652;
+        }
+
+        h3 {
+            color: #de2a0e;
+        }
+
+        .logout-btn {
+            line-height: 30px;
+            float: right;
+            width: 100%;
+            padding: 10px 15px;
+            background-color: #212121;
+            color: #e5e259;
+            font-weight: bold;
+            border: none;
+        }
+
+        .rent-status {
+            margin-left: 50px;
+        }
+
+        .demo {
+            float: right;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container">
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/home">Back</a></li>
+                <li><a href="/order">My orders</a></li>
+                <li>
+                    <form th:action="@{/logout}" method="post">
+                        <input class="logout-btn" type="submit" value="Logout"/>
+                    </form>
+                </li>
+            </ul>
+            <div class="demo">
+                <h3 th:inline="text">DEMO for [[${#httpServletRequest.remoteUser}]]</h3>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="rent-status">
+    <h3>
+        <p>Ooops!</p>
+        <p>You can NOT rent this film because you are renting it already!</p>
+    </h3>
+</div>
+
+</body>
+</html>

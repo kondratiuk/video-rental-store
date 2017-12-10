@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>VR Store</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #b0d4ee;
+            color: #123652;
+        }
+
+        h3 {
+            color: #de2a0e;
+        }
+
+        h4 {
+            color: #0937ff;
+        }
+
+        h5 {
+            color: #d11021;
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        .demo {
+            float: right;
+        }
+
+        .left-part {
+            float: left;
+            width: 30%;
+            margin-left: 50px;
+        }
+
+        .film-header {
+            width: 60%;
+            overflow: auto;
+        }
+
+        .film-detail-w {
+            width: 100px;
+        }
+
+        .error-details {
+            margin-left: 50px;
+        }
+
+        .cacl-price-btn {
+            background-color: #212121;
+            color: #fbfbfb;
+            border: none;
+        }
+
+        .rent-btn {
+            background-color: #212121;
+            color: #fbfbfb;
+            border: none;
+        }
+
+        .logout-btn {
+            line-height: 30px;
+            float: right;
+            width: 100%;
+            padding: 10px 15px;
+            background-color: #212121;
+            color: #e5e259;
+            font-weight: bold;
+            border: none;
+        }
+    </style>
+    <script>
+        var getImdb = function () {
+            var thelink = document.getElementById("link").href = window.location.toString();
+            var res = thelink.substring(thelink.length - 9, thelink.length);
+            document.getElementById("current-imdbid").value = res;
+        }
+    </script>
+    <script>
+        var setRent = function () {
+            var thelink = document.getElementById("link").href = window.location.toString();
+            var res = thelink.substring(thelink.length - 9, thelink.length);
+            document.getElementById('currentImdb').value = res;
+            document.getElementById('currentPeriod').value = document.getElementById('period').value;
+        }
+    </script>
+</head>
+
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container">
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/home">Home</a></li>
+                <li><a href="/order">My orders</a></li>
+                <li>
+                    <form th:action="@{/logout}" method="post">
+                        <input class="logout-btn" type="submit" value="Logout"/>
+                    </form>
+                </li>
+            </ul>
+            <div class="demo">
+                <h3 th:inline="text">DEMO for [[${#httpServletRequest.remoteUser}]]</h3>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="film-details">
+    <div class="left-part">
+        <img th:src="${posterUrl}" alt="Here should be poster of the film!" width="60%" height="60%" border="0"/>
+        <p></p>
+        <table class="film-header">
+            <tr th:each="filmDetail : ${filmDetails}">
+                <td class="film-detail-w" th:text="${filmDetail.key}"></td>
+                <td th:text="${filmDetail.value}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <form class="container" id="whole-details">
+        <div style="float: left; width:70%;">
+            <form class="container" id="details" th:action="@{/film}" th:object="${detailsForm}" method="get">
+                <h3>
+                    <span th:text="${viewed}"></span>
+                </h3>
+                <p>
+                <h4>
+                    How many days would you like to rent the film?
+                    <input type="number" id="period" min="1" max="365" th:field="*{rentDays} "/>
+
+                    <a href="#" id="link" target="_blank"></a>
+                    <button class="cacl-price-btn" id="current-imdbid" name="imdbid" onclick="getImdb()">Calculate price</button>
+                </h4>
+                </p>
+            </form>
+            <p></p>
+            <div id="num-details">
+                <span th:text="'If you take a film released before 2000 year you will pay ' + ${basicPrice}
+                            + 'SEK for the first 5 days and than this price per each next day! Also you will get 2 bonus points!'"></span>
+                <p></p>
+                <span th:text="'If you take a film released from 2000 till 2016 year you will pay ' + ${basicPrice}
+                            + 'SEK for the first 3 days and than this price per each next day! Also you will get 1 bonus point!'"></span>
+                <p></p>
+                <span th:text="'If you take a film released from 2016 and later you will pay ' + ${premiumPrice}
+                            + 'SEK per each day! Also you will get 1 bonus point!'"></span>
+                <p></p>
+                <h3>
+                    <span id="priceset" th:text="${filmPrice}"></span>
+                </h3>
+            </div>
+
+            <form id="confirm" action="/film/rent" method="POST">
+                <input type="hidden" id="currentImdb" name="currentImdb"/>
+                <input type="hidden" id="currentPeriod" name="currentPeriod"/>
+                <button class="rent-btn" type="submit" onclick="setRent()">RENT</button>
+            </form>
+            <p></p>
+            <div>
+                <p></p>
+                <p>Payment for the film renting is omitted in Demo mode.</p>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="error-details">
+    <h5>
+        <span th:text="${noFilmDetails}"></span>
+    </h5>
+</div>
+
+</body>
+</html>

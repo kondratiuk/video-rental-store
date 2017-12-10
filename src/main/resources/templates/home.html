@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>VR Store</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #b0d4ee;
+            color: #123652;
+        }
+
+        h3 {
+            color: #de2a0e;
+        }
+
+        h4 {
+            color: #0937ff;
+        }
+
+        h5 {
+            color: #d11021;
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+
+        .logout-btn {
+            line-height: 30px;
+            float: right;
+            width: 100%;
+            padding: 10px 15px;
+            background-color: #212121;
+            color: #e5e259;
+            font-weight: bold;
+            border: none;
+        }
+
+        .demo {
+            float: right;
+        }
+
+        .search-btn {
+            background-color: #212121;
+            color: #fbfbfb;
+            border: none;
+        }
+
+        .search-res {
+            width: 82%;
+            overflow: auto;
+        }
+
+        .imdb-w {
+            width: 80px;
+        }
+
+        .year-w {
+            width: 60px;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container">
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/#">Home</a></li>
+                <li><a href="/order">My orders</a></li>
+                <li><a href="/about">About</a></li>
+                <li>
+                    <form th:action="@{/logout}" method="post">
+                        <input class="logout-btn" type="submit" value="Logout"/>
+                    </form>
+                </li>
+            </ul>
+            <div class="demo">
+                <h3 th:inline="text">DEMO for [[${#httpServletRequest.remoteUser}]]</h3>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<form class="container" action="/home" th:object="${searchForm}" method="get">
+    <div class="search">
+        <input type="text" id="search-input" placeholder="Enter a film title here" size="50" th:field="*{title}"/>
+        <button class="search-btn">Search</button>
+        <div class="input-error">
+            <td th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Error message</td>
+        </div>
+        <p></p>
+        <div class="starter-template">
+            <h4>
+                <span th:text="${searchResult}"></span>
+            </h4>
+        </div>
+        <p></p>
+        <div>
+            <p></p>
+            <h5>
+                <span th:text="${rentFilm}"></span>
+            </h5>
+        </div>
+        <p></p>
+    </div>
+</form>
+
+<form class="container" id="table-form" action="#" method="get">
+    <div class="search-res">
+        <table class="search-res">
+            <tr style="height:20px;">
+                <th class="imdb-w">IMDB ID</th>
+                <th class="year-w">Year</th>
+                <th>Film Title</th>
+            </tr>
+            <tr th:each="film : ${films}">
+                <td class="imdb-w"><a th:href="@{http://www.imdb.com/title/} + ${film.imdbID}"
+                                      th:text="${film.imdbID}"> is imdbID</a></td>
+                <td class="year-w" th:text="${film.year}"> is year</td>
+                <td><a th:href="@{/film(imdbid=${film.imdbID})}" th:text="${film.title}"> is title</a></td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <p></p>
+        <h6>
+            Search based on the Film database provided by <a href="http://www.omdbapi.com">OMDb API</a>
+            <p></p>
+            Film shown in the order by relevance as provided by Film Provider.
+        </h6>
+    </div>
+    <p></p>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>VR Store</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #b0d4ee;
+            color: #123652;
+        }
+
+        h2 {
+            color: #111ab1;
+        }
+
+        h3 {
+            color: #de2a0e;
+        }
+
+        h4 {
+            color: #0937ff;
+        }
+
+        .logout-button {
+            line-height: 30px;
+            float: right;
+            width: 100%;
+            padding: 10px 15px;
+            background-color: #212121;
+            color: #e5e259;
+            font-weight: bold;
+            border: none;
+        }
+
+        .about {
+            margin-left: 50px;
+        }
+
+        .demo {
+            float: right;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container">
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/home">Home</a></li>
+                <li class="active"><a href="/about">About</a></li>
+                <li>
+                    <form th:action="@{/logout}" method="post">
+                        <input class="logout-button" type="submit" value="Logout"/>
+                    </form>
+                </li>
+            </ul>
+            <div class="demo">
+                <h3 th:inline="text">DEMO</h3>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="about">
+    <h2>
+        <p>This is Demo version of Video Rental Store application.</p>
+        <h4>
+            <p>December 2017</p>
+        </h4>
+        <p></p>
+        <p>Thank you for testing it! :)</p>
+    </h2>
+</div>
+
+</body>
+</html>

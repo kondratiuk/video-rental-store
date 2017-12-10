@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>VR Store</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #b0d4ee;
+            color: #123652;
+        }
+
+        h3 {
+            color: #de2a0e;
+        }
+
+        h4 {
+            color: #0937ff;
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #c7c7c7;
+        }
+
+        .logout-btn {
+            line-height: 30px;
+            float: right;
+            width: 100%;
+            padding: 10px 15px;
+            background-color: #212121;
+            color: #e5e259;
+            font-weight: bold;
+            border: none;
+        }
+
+        .demo {
+            float: right;
+        }
+
+        .bonus-points {
+            margin-left: 50px;
+        }
+
+        .clear {
+            margin-left: 50px;
+        }
+
+        .stop-order {
+            margin-left: 350px;
+        }
+
+        .stop-imdb {
+            width: 100px;
+        }
+
+        .descr {
+            margin-left: 20px;
+        }
+
+        .clear-history {
+            background-color: #b71022;
+            color: #fbfbfb;
+            border: none;
+        }
+
+        .stop-rent {
+            background-color: #212121;
+            color: #fbfbfb;
+            border: none;
+        }
+
+        .clear-rules {
+            margin-left: 350px;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container">
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/home">Home</a></li>
+                <li class="active"><a href="/order">My orders</a></li>
+                <li>
+                    <form th:action="@{/logout}" method="post">
+                        <input class="logout-btn" type="submit" value="Logout"/>
+                    </form>
+                </li>
+            </ul>
+            <div class="demo">
+                <h3 th:inline="text">DEMO for [[${#httpServletRequest.remoteUser}]]</h3>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div>
+    <p></p>
+    <h4>
+        <span class="bonus-points" th:text="${bonusPoint}"></span>
+    </h4>
+    <form class="stop-order" action="/order/imdb" method="POST">
+        <input class="stop-imdb" id="stopImdb" name="stopImdb" minlength="9" maxlength="9"/>
+        <button class="stop-rent">Stop Renting</button>
+        <span class="descr">Please, enter valid IMDB ID from the list below for the film which renting should be stopped.</span>
+    </form>
+    <p></p>
+    <p class="clear-rules">When you re-rent a film again the information about it will be overwritten below but you will
+        keep your previously collected bonus points. </p>
+    <p class="clear-rules">If you stopped renting a film earlier than initial period the extra payment would not be
+        returned to you. You always see only actual price.</p>
+</div>
+<p></p>
+<form id="order-form">
+    <div style="margin-left: 50px; overflow:auto;">
+        <table style="overflow:auto">
+            <tr style="height:20px;">
+                <th style="width:40px;">#</th>
+                <th style="width:80px;">IMDB ID</th>
+                <th style="width:60px;">Year</th>
+                <th style="width:400px;">Title</th>
+                <th style="width:100px;">Start Date</th>
+                <th style="width:110px;">Initial Period, days</th>
+                <th style="width:90px;">Initial Price, SEK</th>
+                <th style="width:100px;">End Date</th>
+                <th style="width:90px;">Charge Price, SEK</th>
+                <th style="width:90px;">Total Price, SEK</th>
+            </tr>
+            <tr th:each="order : ${orders}">
+                <td style="width:40px;" th:text="${order.count}"></td>
+                <td style="width:80px;" th:text="${order.imdbID}"></td>
+                <td style="width:60px;" th:text="${order.year}"></td>
+                <td style="width:400px;" th:text="${order.title}"></td>
+                <td style="width:100px;" th:text="${order.startDate}"></td>
+                <td style="width:110px;" th:text="${order.initPeriod}"></td>
+                <td style="width:90px;" th:text="${order.initPrice}"></td>
+                <td style="width:100px;" th:text="${order.endDate}"></td>
+                <td style="width:90px;" th:text="${order.chargePrice}"></td>
+                <td style="width:90px; font-weight:bold" th:text="${order.totalPrice}"></td>
+            </tr>
+        </table>
+    </div>
+</form>
+<div>
+    <p></p>
+    <form class="clear" id="clear-orders" action="/order/clear" method="POST">
+        <input type="hidden" id="clearHistory" name="clearHistory" value="clear"/>
+        <button class="clear-history">Clear History</button>
+        <span class="descr">All your history including bonus points will be deleted!</span>
+    </form>
+</div>
+
+</body>
+</html>
